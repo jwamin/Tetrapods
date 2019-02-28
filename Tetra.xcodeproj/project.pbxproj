@@ -37,6 +37,7 @@
 		3D4A161C2228744C005F8AFA /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		3D4A161F2228744C005F8AFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3D4A16212228744C005F8AFA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3D4A1631222882B9005F8AFA /* single_tetrapod2.blend */ = {isa = PBXFileReference; lastKnownFileType = file; path = single_tetrapod2.blend; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +61,7 @@
 		3D4A15F92228744B005F8AFA = {
 			isa = PBXGroup;
 			children = (
+				3D4A163022288263005F8AFA /* Blender */,
 				3D4A15FE2228744B005F8AFA /* Tetra Shared */,
 				3D4A16082228744C005F8AFA /* Tetra iOS */,
 				3D4A16192228744C005F8AFA /* Tetra macOS */,
@@ -107,6 +109,14 @@
 				3D4A16212228744C005F8AFA /* Info.plist */,
 			);
 			path = "Tetra macOS";
+			sourceTree = "<group>";
+		};
+		3D4A163022288263005F8AFA /* Blender */ = {
+			isa = PBXGroup;
+			children = (
+				3D4A1631222882B9005F8AFA /* single_tetrapod2.blend */,
+			);
+			path = Blender;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -7,6 +7,11 @@
 //
 
 import SceneKit
+import ModelIO
+
+func degToRad(degrees:Float)->CGFloat{
+    return CGFloat(degrees * (.pi / 180))
+}
 
 #if os(watchOS)
     import WatchKit
@@ -14,8 +19,10 @@ import SceneKit
 
 #if os(macOS)
     typealias SCNColor = NSColor
+    typealias Image = NSImage
 #else
     typealias SCNColor = UIColor
+    typealias Image = UIImage
 #endif
 
 class GameController: NSObject, SCNSceneRendererDelegate {
@@ -23,19 +30,57 @@ class GameController: NSObject, SCNSceneRendererDelegate {
     let scene: SCNScene
     let sceneRenderer: SCNSceneRenderer
     
+    var pod:SCNNode!
+    
     init(sceneRenderer renderer: SCNSceneRenderer) {
         sceneRenderer = renderer
-        scene = SCNScene(named: "Art.scnassets/ship.scn")!
+        scene = SCNScene(named: "Art.scnassets/tetrapod.scn")!
         
         super.init()
         
         sceneRenderer.delegate = self
         
-        if let ship = scene.rootNode.childNode(withName: "ship", recursively: true) {
-            ship.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
+        let plane = SCNPlane(width: 10, height: 10)
+        let planenode = SCNNode(geometry: plane)
+        planenode.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: plane, options: nil))
+        
+        planenode.rotation = SCNVector4.init(1, 0, 0, degToRad(degrees: -90))
+        planenode.geometry!.firstMaterial!.isDoubleSided = true
+        planenode.position = SCNVector3(x: 0, y: -3, z: 0)
+        let material = SCNMaterial()
+        let path = Bundle.main.path(forResource: "concrete", ofType: "jpg", inDirectory: "Art.scnassets")!
+        print(path)
+        let img = Image(contentsOfFile: path)
+        print(img)
+        material.diffuse.contents = img
+        
+        plane.materials = [material]
+        scene.rootNode.addChildNode(planenode)
+        
+        //scene.background.contents = MDLSkyCubeTexture(name: nil,
+//                                                      channelEncoding: .uInt8,
+//                                                      textureDimensions: [Int32(160), Int32(160)],
+//                                                      turbidity: 0,
+//                                                      sunElevation: 10,
+//                                                      upperAtmosphereScattering: 10,
+//
+//                                                      groundAlbedo: 2)
+        
+        if let pod = scene.rootNode.childNode(withName: "tetrapod", recursively: true) {
+            //ship.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
+            self.pod = pod
+            pod.physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: pod.geometry!, options: nil))
+            pod.position = .init()
         }
         
         sceneRenderer.scene = scene
+    }
+    
+    func addPod(){
+        let pod = self.pod.clone()
+        pod.physicsBody = SCNPhysicsBody(type: .dynamic, shape: SCNPhysicsShape(geometry: pod.geometry!, options: nil))
+        pod.position = .init()
+        scene.rootNode.addChildNode(pod)
     }
     
     func highlightNodes(atPoint point: CGPoint) {
